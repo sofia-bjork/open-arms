@@ -434,7 +434,7 @@ saveRDS(seqtab, file = file.path(coi_dir, paste("seqtab_", img_id, "_makeBinnedQ
 
 # Get number of reads in files prior to cutadapt application
 
-input <- countFastq(path, pattern = ".gz")          # get statistics from input files
+input <- countFastq(path, pattern = ".fastq")          # get statistics from input files
 input$Sample <- rownames(input)
 input$Sample <- gsub("_2.*", "", input$Sample)       # Remove all characters after the first _2 in file names
 input <- aggregate(.~Sample, input, FUN = "mean")   # Aggregate forward and reverse read files 
