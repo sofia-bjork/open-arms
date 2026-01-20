@@ -1,0 +1,1 @@
+This directiry contains the metadata from both the ASSEMBLE+ and EMBRC projects, as well as the summary metadata files from the project pipelines. It also contains the fasta files for macse nuMT removal. 

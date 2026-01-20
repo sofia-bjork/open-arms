@@ -1,0 +1,1 @@
+This directory contains the conda environment and the apptainer def file. 
