@@ -4,7 +4,7 @@ library(dada2)
 
 # read COI sample summary and extract run numbers
 
-coi_summary <- read.csv("data/generated_meta/COI_demultiplexed_summary.csv", 
+coi_summary <- read.csv("metadata/generated_meta/COI_demultiplexed_summary.csv", 
                         sep = ",", header = TRUE)
 coi_run <- unique(coi_summary$Sequencing_batch)
 

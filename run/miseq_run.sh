@@ -11,7 +11,7 @@ cd /PATH/TO/open-arms
 Rscript miseq/scripts/project_scripts/demultiplexed_summary.R -o Koster -p DMSO
 
 # create run number summary file
-Rscript scripts/project_scripts/sequencing_run.R
+Rscript miseq/scripts/project_scripts/sequencing_run.R
 
 # download the specified ENA fastq files
 Rscript miseq/scripts/original_scripts/ENADownload.R -f metadata/generated_meta/COI_ENA_accessions.txt -d miseq/COI/fastq_files
