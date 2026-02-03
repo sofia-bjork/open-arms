@@ -8,13 +8,15 @@ input_dir <- file.path("novaseq", "COI")
 # specify output directory 
 output_dir <- file.path("novaseq", "COI")
 
-coi_run <- c(4)
+# load sequencing batch numbers
+batch_dir    <- file.path("novaseq", "COI", "fastq_files")
+batch_list <- list.files(batch_dir, pattern = "Batch")
 
 # Load the sequence tables of the different sequence runs
 
 rds_list <- list()
 for (run in coi_run) {
-  run_file <- file.path(input_dir, paste("seqtab_batch", run, "_mod4.rds", sep = ""))
+  run_file <- file.path(input_dir, paste("seqtab_", run, "_mod4.rds", sep = ""))
   rds_run <- readRDS(run_file)
   rds_list[[as.character(run)]] <- rds_run
 }

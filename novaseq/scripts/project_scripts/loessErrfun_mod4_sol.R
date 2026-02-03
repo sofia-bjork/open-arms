@@ -1,17 +1,5 @@
 #!/usr/bin/env Rscript
 
-
-##### THIS SCRIPT IMPLEMENTS A SOLUTION TO THE BINNED QUALITY SCORES + ERROR FUNCTION PROBLEM #####
-##### FROM THE DADA2 FORUM https://github.com/benjjneb/dada2/issues/1307 BY hhollandmoritz #####
-##### INSPIRED BY A SOLUTION FROM JacobRPrices #####
-
-## it is important to load the dplyr library for the code to work ##
-library(dplyr)
-
-
-
-### dada2 COI workflow with cutadapt primer removal ###
-
 library(argparse)
 
 # Initialize command line argument parser
@@ -26,17 +14,28 @@ args <- parser$parse_args()
 # Access the arguments
 cutadapt <- args$directory
 
+# load filter_and_trim function
+filter_and_trim <- function(seq_batch, cutadapt){
+
+##### THIS SCRIPT IMPLEMENTS A SOLUTION TO THE BINNED QUALITY SCORES + ERROR FUNCTION PROBLEM #####
+##### FROM THE DADA2 FORUM https://github.com/benjjneb/dada2/issues/1307 BY hhollandmoritz #####
+##### INSPIRED BY A SOLUTION FROM JacobRPrices #####
+
+## it is important to load the dplyr library for the code to work ##
+library(dplyr)
+
+### dada2 COI workflow with cutadapt primer removal ###
+
 # read step 2 in dx.doi.org/10.17504/protocols.io.n92ldmmmnl5b/v1 for more information about 
 # which runs go through which function and why
 
 # directory containing the fastq.gz files
-path    <- file.path("novaseq", "COI", "fastq_files")
+path    <- file.path("novaseq", "COI", "fastq_files", seq_batch)
 
 # COI filtering directory
 coi_dir <- file.path("novaseq", "COI")
 
-# suffix for output images
-img_id  <- gsub("_", "", "batch4")
+img_id  <- gsub("_", "", seq_batch)
 
 message("The specified directory contains the following files:")
 print(list.files(path))
@@ -442,6 +441,14 @@ write.table(track,
             file = file.path(coi_dir, paste("track_", img_id, "_mod4.txt", sep = "")),
             sep = "\t", col.names = NA)
 
+}
 
+# load all batches in fastq_files directory
+path    <- file.path("novaseq", "COI", "fastq_files")
+batch_list <- list.files(path, pattern = "Batch")
 
+# run load filter_and_trim function on each batch
 
+for (batch in batch_list){
+  filter_and_trim(batch, cutadapt)
+}
