@@ -64,10 +64,10 @@ library(ggplot2)
 
 # generate matched lists of the forward and reverse read files, as well as parsing out the sample name
 fnFs <- list.files(path, pattern = ".fastq", full.names = TRUE)
-fnFs <- sort(fnFs[grep("_2_1_", fnFs)])
+fnFs <- sort(fnFs[grep("_1_H", fnFs)])
 
 fnRs <- list.files(path, pattern = ".fastq", full.names = TRUE)
-fnRs <- sort(fnRs[grep("_2_2_", fnRs)])
+fnRs <- sort(fnRs[grep("_2_H", fnRs)])
 
 
 # Designate sequences [including ambiguous nucleotides (base = N, Y, W, etc.) if present) of the primers used
@@ -151,10 +151,10 @@ rbind(FWD.ForwardReads = sapply(FWD.orients, primerHits, fn = fnFs.cut),
 
 # Forward and reverse fastq filenames have the format:
 cutFs <- list.files(path.cut, pattern = ".fastq", full.names = TRUE)
-cutFs <- sort(cutFs[grep("_2_1_", cutFs)])
+cutFs <- sort(cutFs[grep("_1_H", cutFs)])
 
 cutRs <- list.files(path.cut, pattern = ".fastq", full.names = TRUE)
-cutRs <- sort(cutRs[grep("_2_2_", cutRs)])
+cutRs <- sort(cutRs[grep("_2_H", cutRs)])
 
 # Check if forward and reverse files match:
 
@@ -245,8 +245,8 @@ out
 
 # Check if file names match
 
-sample.names <- unname(sapply(filtFs, get.sample.name)) # Assumes filename = ABC_XXXOSTA_2_X_X-BIDXX.fastq.gz
-sample.namesR <- unname(sapply(filtRs, get.sample.name)) # Assumes filename = ABC_XXXOSTA_2_X_X-BIDXX.fastq.gz
+sample.names <- unname(sapply(filtFs, get.sample.name)) # Assumes filename = ABC_XXXOSTA_X_1_HXXXXX-BIDXX.fastq.gz
+sample.namesR <- unname(sapply(filtRs, get.sample.name)) # Assumes filename = ABC_XXXOSTA_X_2_HXXXXX-BIDXX.fastq.gz
 if(identical(sample.names, sample.namesR)) {print("Files are still matching.....congratulations")
 } else {stop("Forward and reverse files do not match.")}
 names(filtFs) <- sample.names
