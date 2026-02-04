@@ -165,7 +165,7 @@ if (length(cutFs) != length(cutRs)) stop("Forward and reverse files do not match
 # Extract sample names, assuming filenames have format:
 get.sample.name <- function(fname) {
   subnames <- strsplit(basename(fname), "_")[[1]]
-  paste(subnames[1:2], collapse = "_")
+  paste(subnames[1:3], collapse = "_")
 }
 sample.names <- unname(sapply(cutFs, get.sample.name))
 
