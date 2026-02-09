@@ -12,11 +12,14 @@ output_dir <- file.path("novaseq", "COI")
 batch_dir    <- file.path("novaseq", "COI", "fastq_files")
 batch_list <- list.files(batch_dir, pattern = "Batch")
 
+get_sample_name <- function(fname) strsplit(basename(fname), "_")[[1]][2]
+coi_run <- unname(sapply(batch_list, get_sample_name))
+
 # Load the sequence tables of the different sequence runs
 
 rds_list <- list()
 for (run in coi_run) {
-  run_file <- file.path(input_dir, paste("seqtab_", run, "_mod4.rds", sep = ""))
+  run_file <- file.path(input_dir, paste("seqtab_Batch", run, "_mod4.rds", sep = ""))
   rds_run <- readRDS(run_file)
   rds_list[[as.character(run)]] <- rds_run
 }
@@ -95,7 +98,7 @@ colnames(track_nochim_nosingle) <- c("length_filt", "nonchim", "nosingle")
 
 track_list <- list()
 for (run in coi_run) {
-  track_file <- file.path(input_dir, paste("track_batch", run, "_mod4.txt", sep = ""))
+  track_file <- file.path(input_dir, paste("track_Batch", run, "_mod4.txt", sep = ""))
   txt_track <- read.table(track_file, sep = "\t", header = T, row.names = 1)
   track_list[[as.character(run)]] <- txt_track
 }
