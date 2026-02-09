@@ -28,21 +28,26 @@ metadata_sum <- read.csv(file = file.path(gen_meta, "COI_demultiplexed_summary.c
 MOTU_tax_tab <- read.csv(file = file.path(boldigger_dir, "COI_motu_table_tax_counts_species_fullname.txt"),
                          sep = "\t", header = TRUE)
 
+# remove ERR4018454 AND ERR4018455 (SED samples) from both metadata_sum and MOTU_tax_tab
 
+MOTU_tax_tab = subset(MOTU_tax_tab, select = -c(ERR4018454, ERR4018455))
+metadata_sum <- metadata_sum[!grepl(c("ERR4018454"), metadata_sum$Gene_COI), ]
+metadata_sum <- metadata_sum[!grepl(c("ERR4018455"), metadata_sum$Gene_COI), ]
 
 
 # remove all rows where genus and species are NA
-MOTU_tax_tab <- MOTU_tax_tab[!(is.na(MOTU_tax_tab$genus) & is.na(MOTU_tax_tab$species)), ]
-species_tax_tab <- MOTU_tax_tab[!is.na(MOTU_tax_tab$species), ]
+MOTU_tax_tab <- MOTU_tax_tab[!is.na(MOTU_tax_tab$species), ]
+# MOTU_tax_tab <- MOTU_tax_tab[!(is.na(MOTU_tax_tab$genus) & is.na(MOTU_tax_tab$species)), ]
+# species_tax_tab <- MOTU_tax_tab[!is.na(MOTU_tax_tab$species), ]
 
 # create subset of taxonomic  information to extract
 taxonomy_info <- data.frame(MOTU_tax_tab[c("MOTU", "phylum", "family", "genus", "species")])
 
 #### extract pyhylum information from the total MOTU taxonomy table ####
 colors <- c("#CAFFBF", "#fdffb6", "#ffd6a5", "#ffadad", "#ffc6ff", "#bdb2ff", "#a0c4ff")
-gradient_colors <- colorRampPalette(colors)(21)
+gradient_colors <- colorRampPalette(colors)(22)
 
-phylum_sum_barplot <- ggplot(species_tax_tab, aes(x = phylum, fill = phylum)) +
+phylum_sum_barplot <- ggplot(MOTU_tax_tab, aes(x = phylum, fill = phylum)) +
   geom_bar(color = "#0F30b4") + 
   
   geom_text(stat = "count", aes(label = ..count..), vjust = -0.4, color = "#0F30b4", size = 3.3) +
@@ -110,8 +115,7 @@ species_df <- data.frame(
 colors <- c("#CAFFBF", "#fdffb6", "#ffd6a5", "#ffadad", "#ffc6ff", "#bdb2ff", "#a0c4ff")
 gradient_colors <- colorRampPalette(colors)(21)
 
-# species_sum_barplot <- 
-ggplot(species_df, aes(x = year, y = species, fill = year)) +
+species_sum_barplot <- ggplot(species_df, aes(x = year, y = species, fill = year)) +
   
   geom_col(color = "#0F30b4", 
            fill = c("#fdffb6", "#ffadad", "#bdb2ff"),
@@ -190,14 +194,21 @@ species_list <- list(taxtab_2018$species[!is.na(MOTU_tax_tab$species)],
                    taxtab_2020$species[!is.na(MOTU_tax_tab$species)])
 
 # create venn diagram from list
-species_venn <- ggVennDiagram(list(taxtab_2018$species, taxtab_2019$species, taxtab_2020$species),
+species_venn <- ggVennDiagram(species_list,
               category.names = c("Species 2018", "Species 2019", "Species 2020"),
-              label_alpha = 0) + 
-  scale_fill_gradient(low = "#FFD6A5", high = "#A0C4FF") +
-  scale_x_continuous(expand = expansion(mult = .3)) +
-  labs(caption = Sys.Date())
+              label_alpha = 0, set_color = "#0F30b4", label_color = "#0F30b4",
+              label_txtWidth = 0.5, edge_size = 0.5, set_size = 8, label_size = 8) + 
+  scale_fill_gradient(low = "#CAFFBF", high = "#ffadad") +
+  scale_x_continuous(expand = expansion(mult = 0.4)) +
+  theme(legend.position = c(0.88, 0.5),
+  plot.background = element_rect(fill = "#e8e8e8", color = "#e8e8e8"),
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
+  legend.text = element_text(color = "#0F30b4", size = 12),
+  legend.title = element_blank(),
+  legend.key.size = unit(1.5, "cm"))
 
 # save venn diagram to file in figures_dir
-ggsave("venn_species_2018_to_2020.png", plot = species_venn, 
-       dpi = 300, path = figures_dir)
+ggsave("venn_species_2018_to_2020.png", plot = species_venn, path = figures_dir,
+       dpi = 400, width = 12, height = 12)
 
