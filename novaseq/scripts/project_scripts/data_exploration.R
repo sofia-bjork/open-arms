@@ -33,7 +33,9 @@ novaseq_taxtab <- read.csv(file = file.path(novaseq_boldigger_dir, "COI_motu_tab
                          sep = "\t", header = TRUE)
 
 
-
+miseq_taxtab = subset(miseq_taxtab, select = -c(ERR4018454, ERR4018455))
+metadata_sum <- metadata_sum[!grepl(c("ERR4018454"), metadata_sum$Gene_COI), ]
+metadata_sum <- metadata_sum[!grepl(c("ERR4018455"), metadata_sum$Gene_COI), ]
 
 # remove all rows where genus and species are NA
 # miseq_taxtab <- miseq_taxtab[!(is.na(miseq_taxtab$genus) & is.na(miseq_taxtab$species)), ]
