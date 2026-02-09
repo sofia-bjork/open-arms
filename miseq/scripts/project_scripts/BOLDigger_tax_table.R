@@ -15,12 +15,12 @@ bold <- as.data.frame(read_xlsx(path = file.path(lulu_dir, "boldigger3_data", "C
 colnames(bold)[1] <- "MOTU"
 
 ## Generate final taxonomy
-phylum <- ifelse(bold$pct_identity > 85, bold$phylum, "NA")
-class <- ifelse(bold$pct_identity > 85, bold$class, "NA")
-order <- ifelse(bold$pct_identity > 85, bold$order, "NA")
-family <- ifelse(bold$pct_identity > 90, bold$family, "NA")
-genus <- ifelse(bold$pct_identity > 95, bold$genus, "NA")
-species <- ifelse(bold$pct_identity > 98, bold$species, "NA")
+phylum <- ifelse(bold$pct_identity > 85, bold$phylum, NA)
+class <- ifelse(bold$pct_identity > 85, bold$class, NA)
+order <- ifelse(bold$pct_identity > 85, bold$order, NA)
+family <- ifelse(bold$pct_identity > 90, bold$family, NA)
+genus <- ifelse(bold$pct_identity > 95, bold$genus, NA)
+species <- ifelse(bold$pct_identity > 98, bold$species, NA)
 
 tax_table <- cbind(MOTU = bold$MOTU, phylum, class, order, family, genus, species)
 
